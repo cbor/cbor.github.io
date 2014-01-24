@@ -5,6 +5,7 @@
     <!-- Always force latest IE rendering engine or request Chrome Frame -->
     <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
     <meta content='width=device-width' name='viewport'>
+    <meta content='width=device-width, initial-scale=1.0' name='viewport'>
     <!-- Use title if it's in the page YAML frontmatter -->
     <title>CBOR — Concise Binary Object Representation | {{ page.title }}</title>
     <link href="/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
@@ -43,14 +44,21 @@
 {{ content }}
       <hr>
       <div class='footer'>
-        <a href='mailto:cabo@tzi.org?subject=cbor.io'>Carsten Bormann</a>
-        •
-        <a href='http://tzi.de'>TZI</a>
-        • 2014
-          
-        <a href='https://github.com/cbor/cbor.github.io/issues/new'>Feedback: Create a github issue (free github account required)</a>
-        or
-        <a href='mailto:cabo@tzi.org?subject=cbor.io'>just send mail</a>
+        <div class='row-fluid'>
+          <div class='span3'>
+            <small>
+              <a href='mailto:cabo@tzi.org?subject=cbor.io'>Carsten Bormann</a>
+              •
+              <a href='http://tzi.de'>TZI</a>
+              • 2014
+            </small>
+          </div>
+          <div class='span7 offset2'>
+            <a href='https://github.com/cbor/cbor.github.io/issues/new'>Feedback: Create a github issue (free github account required)</a>
+            or
+            <a href='mailto:cabo@tzi.org?subject=cbor.io'>just send mail</a>
+          </div>
+        </div>
       </div>
     </div>
     <script>
