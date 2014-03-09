@@ -62,9 +62,9 @@ h3 {
   "published": new Date(1382565143000)
 }</pre>
 
-        <p>There is nothing special about JavaScipt with respect to CBOR.  It should be usable in almost any programming language.  JavaScript is merely convenient to describe the encoded objects in a more human-readable way.</p>
+        <p>(There is nothing special about JavaScript with respect to CBOR.  It should be usable in just about any programming language.  JavaScript is merely convenient for this tutorial to describe the encoded objects in a more human-readable way.)</p>
 
-        <p>We'll walk you through how decoding works.  First, read a single byte from the input, and look at the most sigificant three bits.  They tell you what the "Major Type" is of the data item we're reading.  These three bits can signal one of eight Major Types:</p>
+        <p>We'll walk you through how decoding works.  First, read a single byte from the input, and look at the most significant three bits.  They tell you what the "Major Type" is of the data item we're reading.  These three bits can signal one of eight Major Types:</p>
 
         <table class='table table-striped'>
           <thead>
@@ -191,7 +191,7 @@ h3 {
           </tbody>
         </table>
 
-      <p>Other values might be defined in the future.  If you receive one you don't understand, feel free thow an error, ignore it, turn it into an integer, or whatever rule works best for your use case.</p>
+      <p>Other values might be defined in the future.  If you receive one you don't understand, feel free to throw an error, ignore it, turn it into an integer, or whatever rule works best for your use case.</p>
 
       <p>Here, the value in the first name/value pair in the map we're reading has the value <code>true</code>.</p>
 
@@ -266,7 +266,7 @@ h3 {
 <tr><td>28</td><td>RESERVED: throw an error</td></tr>
 <tr><td>29</td><td>RESERVED: throw an error</td></tr>
 <tr><td>30</td><td>RESERVED: throw an error</td></tr>
-<tr><td>31</td><td>Indeterminite length</td></tr>
+<tr><td>31</td><td>Indeterminate length</td></tr>
 </tbody></table>
 
 <table class='hexdump'><tbody>
@@ -385,7 +385,7 @@ h3 {
 <td class='highlight'>45</td><td class='highlight'>17</td><td colspan="15"></td><td class='hextext highlight'>E.</td>
 </tbody></table>
 
-<p>The tagged item is the four-byte integer <code>0x52684517</code>, which with the Date/Time tag indicates the point in time 1382565143 seconds since the epoch, or <code>Wed, 23 Oct 2013 21:52:23 GMT</code>, the time when <a href='http://tools.ietf.org/html/rfc7409'>RFC 7409</a> was announced.</p>
+<p>The tagged item is the four-byte integer <code>0x52684517</code>, which with the Date/Time tag indicates the point in time 1382565143 seconds since the epoch, or <code>Wed, 23 Oct 2013 21:52:23 GMT</code>, the time when <a href='http://tools.ietf.org/html/rfc7049'>RFC 7049</a> was announced.</p>
 <p class='clr'/>
 
       <h3>Assembling the map</h3>
