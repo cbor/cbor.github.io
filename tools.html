@@ -18,6 +18,28 @@ title: Tools
           <p>
             <a class='btn' href='http://cbor.me'>View details &raquo;</a>
           </p>
+          <h2>CBOR diagnostic utilities</h2>
+          <p>Convert between CBOR and a few other formats, including diagnostic notation.
+          Pretty-print binary CBOR to see what's inside.
+          Installation: <code>gem install cbor-diag</code></p>
+          <p>
+            <a class='btn' href='http://github.com/cabo/cbor-diag'>View details &raquo;</a>
+          </p>
+        </div>
+        <div class='span4'>
+          <h2>CDDL</h2>
+          <p>Write a specification in CDDL for what the overall structure of your CBOR data should be.
+          <strong>Generate</strong> example instances from that specification.
+          <strong>Validate</strong> instances against the specification.
+          Specifications are as simple as:</p>
+          
+          <pre><code class="language-cddl">reputation-object = {&#x000A;  application: tstr&#x000A;  reputons: [* reputon]&#x000A;}&#x000A;&#x000A;reputon = {&#x000A;  rater: tstr&#x000A;  assertion: tstr&#x000A;  rated: tstr&#x000A;  rating: float16&#x000A;  ? confidence: float16&#x000A;  ? normal-rating: float16&#x000A;  ? sample-size: uint&#x000A;  ? generated: uint&#x000A;  ? expires: uint&#x000A;  * tstr: any&#x000A;}&#x000A;</code></pre>
+          
+          <p>(Example based on <a href="https://tools.ietf.org/html/rfc7071">RFC 7071</a>.)</p>
+          
+          <p>Installation: <code>gem install cddl</code></p>
+          
+          <p>(Updated Internet-Draft coming on Monday.)</p>
         </div>
         <div class='span4'>
           <h2>Test vectors</h2>
@@ -27,8 +49,6 @@ title: Tools
           <p>
             <a class='btn' href='https://github.com/cbor/test-vectors/'>View details &raquo;</a>
           </p>
-        </div>
-        <div class='span4'>
           <h2>Tutorials</h2>
           <p>
             Tutorials are being created for CBOR.  Here's one (in French).  Yes, that's about the amount of text you need to become familiar with CBOR...
