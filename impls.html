@@ -7,7 +7,7 @@ title: Implementations
         <p class='lead'>
           CBOR is simple enough to implement from scratch for a specific application.
           <br>
-          For applications where that is not desirable, generic implementations are becoming available for a variety of platforms.
+          For applications where that is not desirable, generic implementations are available for a variety of platforms.
           Many of these implementations stay private, but some are published with liberal open-source licenses such as the Apache 2.0 or the MIT license.
           <br>
           Many implementations use a simple API of the form:
@@ -21,7 +21,7 @@ title: Implementations
       <div class='row-fluid'>
         <div class='span4'>
           <h2 id="javascript">JavaScript</h2>
-          <p>JavaScript implementations are becoming available both for in-browser use and for node.js.</p>
+          <p>JavaScript implementations are available both for in-browser use and for node.js.</p>
           
           <h3 id="browser">Browser</h3>
           <p>A CBOR object can be installed via <code>bower install cbor</code> and used as an AMD module or global object in the browser e.g. in combination with Websockets&#8230;</p>
@@ -70,16 +70,16 @@ title: Implementations
           <p>A Swift implementation without a Foundation dependency (cross-platform ready):</p>
           
           <p><a class="btn" href="https://github.com/myfreeweb/SwiftCBOR">View details &raquo;</a></p>
-        </div>
-        <div class='span4'>
+          
           <h2 id="julia">Julia</h2>
           
           <p><code>CBOR.jl</code> is a Julia package for working with the CBOR
           data format, providing straightforward encoding and decoding for
           Julia types. Install via: <code>Pkg.add("CBOR")</code></p>
           
-          <p><a class="btn" href="https://github.com/saurvs/CBOR.jl">View details »</a></p>
-          
+          <p><a class="btn" href="https://github.com/saurvs/CBOR.jl">View details &raquo;</a></p>
+        </div>
+        <div class='span4'>
           <h2 id="lua">Lua</h2>
           
           <p>Lua-cbor is a pure Lua implementation of CBOR for Lua 5.1—5.3, which
@@ -92,6 +92,11 @@ title: Implementations
           registered with the IANA so far.  It comes with parts implemented in C.</p>
           
           <p><a class="btn" href="https://github.com/spc476/CBOR">View details »</a></p>
+          
+          <p>lua-ConciseSerialization is a pure Lua implementation of CBOR with variants for both 5.1 and 5.3;
+          install via <code>luarocks install lua-conciseserialization</code>.</p>
+          
+          <p><a class="btn" href="http://fperrad.github.io/lua-ConciseSerialization/">View details »</a></p>
           
           <h2 id="python">Python</h2>
           <p>Install a high-speed implementation via pypi: <code>pip install cbor</code> (and/or possibly <code>pip3 install cbor</code>)</p>
@@ -178,6 +183,10 @@ title: Implementations
           <p>JACOB, a small CBOR encoder and decoder implemented in plain Java is at:</p>
           
           <p><a class="btn" href="https://github.com/jawi/jacob">View Details »</a></p>
+          
+          <p><em>borabora</em> supports graph queries and lazy decoding of stream elements:</p>
+          
+          <p><a class="btn" href="https://github.com/noctarius/borabora">View Details »</a></p>
           
           <h2 id="c-c">C, C++</h2>
           <p>A CBOR implementation in C is part of the RIOT operating system for constrained nodes:</p>
