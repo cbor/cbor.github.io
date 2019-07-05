@@ -60,6 +60,24 @@ title: Implementations
           
           <p><a class="btn" href="https://github.com/2tvenom/CBOREncode">View details &raquo;</a></p>
           
+          <h2 id="perl">Perl</h2>
+          <p>Install a comprehensive implementation tailored to Perl's many
+          features via: <code>cpan CBOR::XS</code></p>
+          
+          <p>You'll like the performance data&#8230;</p>
+          
+          <p><a class="btn" href="http://pod.tst.eu/http://cvs.schmorp.de/CBOR-XS/XS.pm">View details &raquo;</a></p>
+          
+          <p>Install a fast, simple implementation that supports
+          current Perl versions and whose license works well
+          with both open- and closed-source projects: <code>cpan CBOR::Free</code></p>
+          
+          <p><a class="btn" href="https://metacpan.org/pod/CBOR::Free">View details &raquo;</a></p>
+          
+          <p>Or, if you need pure Perl, try: <code>cpan CBOR::PP</code></p>
+          
+          <p><a class="btn" href="https://metacpan.org/pod/CBOR::PP">View details &raquo;</a></p>
+          
           <h2 id="go">Go</h2>
           
           <p>An early Go implementation that feels like the JSON library:</p>
@@ -151,24 +169,6 @@ title: Implementations
           
           <p><a class="btn" href="https://pypi.io/project/cbor2/">View details »</a></p>
           
-          <h2 id="perl">Perl</h2>
-          <p>Install a comprehensive implementation tailored to Perl's many
-          features via: <code>cpan CBOR::XS</code></p>
-          
-          <p>You'll like the performance data…</p>
-          
-          <p><a class="btn" href="http://pod.tst.eu/http://cvs.schmorp.de/CBOR-XS/XS.pm">View details »</a></p>
-          
-          <p>Install a fast, simple implementation that supports
-          current Perl versions and whose license works well
-          with both open- and closed-source projects: <code>cpan CBOR::Free</code></p>
-          
-          <p><a class="btn" href="https://metacpan.org/pod/CBOR::Free">View details »</a></p>
-          
-          <p>Or, if you need pure Perl, try: <code>cpan CBOR::PP</code></p>
-          
-          <p><a class="btn" href="https://metacpan.org/pod/CBOR::PP">View details »</a></p>
-          
           <h2 id="ruby">Ruby</h2>
           <p>A high-speed implementation has been derived from the
           <a href="https://msgpack.org">MessagePack</a>
@@ -208,14 +208,23 @@ title: Implementations
           
           <p><a class="btn" href="http://hackage.haskell.org/package/cborg">View details »</a></p>
           
+          <h2 id="ocaml">OCaml</h2>
+          
+          <p>The cbor package is a minimal and lightweight implementation of just the core CBOR data structures. It encodes and decodes to and from OCaml strings:</p>
+          
+          <p><a class="btn" href="https://opam.ocaml.org/packages/cbor/">View details »</a></p>
+          
+          <p>The orsetto package is a serialization framework that includes streaming encoders and decoders for both JSON and CBOR:</p>
+          
+          <p><a class="btn" href="https://opam.ocaml.org/packages/orsetto/">View details »</a></p>
+          
           <h2 id="scala">Scala</h2>
           
           <p>Idiomatic, lightweight and fast CBOR (de)serialization in Scala.
           Zero dependencies, type-class based, easy to integrate.</p>
           
           <p><a class="btn" href="https://github.com/sirthias/borer">View details »</a></p>
-        </div>
-        <div class='span4'>
+          
           <h2 id="clojure">Clojure</h2>
           
           <p><code>clj-cbor</code> is an extensible, native Clojure implementation of
@@ -223,11 +232,13 @@ title: Implementations
           
           <p><a class="btn" href="https://github.com/greglook/clj-cbor">View Details »</a></p>
           
-          <h2 id="c-java">C#, Java</h2>
-          <p>A rather comprehensive implementation that addresses arbitrary precision arithmetic is available in both a C# and a Java version.</p>
+          <h2 id="d">D</h2>
           
-          <p><a class="btn" href="https://github.com/peteroupc/CBOR">View details »</a></p>
+          <p>A compact D implementation with a <a href="https://code.dlang.org/packages/cbor-d">Dub package</a>:</p>
           
+          <p><a class="btn" href="https://github.com/MrSmith33/cbor-d">View Details »</a></p>
+        </div>
+        <div class='span4'>
           <h2 id="java">Java</h2>
           <p>A Java implementation as part of the popular
           <a href="https://github.com/FasterXML/jackson">Jackson</a> JSON library is
@@ -251,6 +262,17 @@ title: Implementations
           <p><em>Cyborg</em> supports a stream parsing/generation API without the need to adapt your data to a specific model:</p>
           
           <p><a class="btn" href="https://github.com/dwaite/cyborg">View Details »</a></p>
+          
+          <h2 id="c-java">C#, Java</h2>
+          <p>A rather comprehensive implementation that addresses arbitrary precision arithmetic is available in both a C# and a Java version.</p>
+          
+          <p><a class="btn" href="https://github.com/peteroupc/CBOR">View details »</a></p>
+          
+          <h2 id="c">C#</h2>
+          
+          <p>Dahomey.Cbor is a high-performance CBOR serialization framework for .Net (C#):</p>
+          
+          <p><a class="btn" href="https://github.com/dahomey-technologies/Dahomey.Cbor">View Details »</a></p>
           
           <h2 id="c-c">C, C++</h2>
           <p>A CBOR implementation in C is part of the RIOT operating system for constrained nodes:</p>
@@ -311,10 +333,24 @@ title: Implementations
           
           <p><a class="btn" href="https://github.com/vi/simple_cbor_stream_parse">View details »</a></p>
           
-          <h2 id="d">D</h2>
+          <p>A basic C++ implementation heavily based on C++17 variants:</p>
           
-          <p>A compact D implementation with a <a href="https://code.dlang.org/packages/cbor-d">Dub package</a>:</p>
+          <p><a class="btn" href="https://github.com/rantydave/cppbor">View details »</a></p>
           
-          <p><a class="btn" href="https://github.com/MrSmith33/cbor-d">View Details »</a></p>
+          <p>Not exactly a coder/decoder per se, but more type based compile
+          time encoder/decoder generator that uses CBOR as one of
+          underlying protocols:</p>
+          
+          <p><a class="btn" href="https://github.com/serge-klim/bobl">View details »</a></p>
+          
+          <p>A "zero-memory-footprint" C decoder in use on some microcontroller/IoT deployments with no memory allocation:</p>
+          
+          <p><a class="btn" href="https://github.com/quartzjer/cb0r">View details »</a></p>
+          
+          <p>Qcbor is a full implementation of CBOR in highly portable
+          C. Commercial quality with measures for software security, small
+          code size, a test suite and documentation.</p>
+          
+          <p><a class="btn" href="https://github.com/laurencelundblade/QCBOR">View details »</a></p>
         </div>
       </div>
