@@ -93,25 +93,29 @@ title: Implementations
           <p><a class="btn" href="https://godoc.org/github.com/ugorji/go/codec#CborHandle">View details &raquo;</a></p>
           
           <h2 id="rust">Rust</h2>
-          
-          <p>A Rust implementation is available that works with Cargo and is on
-          <a href="https://crates.io/crates/cbor">crates.io</a>:</p>
-          
-          <p><a class="btn" href="https://github.com/BurntSushi/rust-cbor">View details &raquo;</a></p>
-          
-          <p>Another Rust implementation has also become available recently on
-          <a href="https://crates.io/crates/cbor-codec">crates.io</a>:</p>
-          
-          <p><a class="btn" href="https://gitlab.com/twittner/cbor-codec">View details &raquo;</a></p>
-          
+
           <p>An implementation using
           <a href="https://docs.serde.rs/serde/index.html">Serde</a>, a framework for
           serializing and deserializing Rust data structures efficiently
           and generically, is available on
-          <a href="https://crates.io/crates/serde_cbor">crates.io</a>:</p>
-          
+          <a href="https://crates.io/crates/serde_cbor">crates.io</a>. It is
+          maintained, but it does not support CBOR Tags, and the upstream
+          serde module has declined to add support:</p>
+
           <p><a class="btn" href="https://github.com/pyfisch/cbor">View details &raquo;</a></p>
-          
+
+          <p>The CBOR-CODEC implementation has also become available recently on
+            <a href="https://crates.io/crates/cbor-codec">crates.io</a>.
+            It supports Tags and can deal with infinite sized objects:</p>
+
+          <p><a class="btn" href="https://gitlab.com/twittner/cbor-codec">View details &raquo;</a></p>
+
+          <p>The rust-cbor implementation is available that works with Cargo and is on
+          <a href="https://crates.io/crates/cbor">crates.io</a>, but is
+          considered unmaintined. It does support CBOR Tags:</p>
+
+          <p><a class="btn" href="https://github.com/BurntSushi/rust-cbor">View details &raquo;</a></p>
+
           <p><a href="https://crates.io/crates/cbor-diag"><code>cbor-diag</code></a>
           is another parser targeted specifically at generating diagnostic
           notation and annotated hex for debugging:</p>
