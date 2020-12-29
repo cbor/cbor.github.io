@@ -1,0 +1,399 @@
+---
+layout: default
+title: Tutorial
+---
+
+<style>
+.highlight {
+  font-size: 150%;
+  font-weight:bold;
+  color:blue;
+}
+.hexdump {
+    font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;
+    background: #f5f5f5;
+    border: 1px solid rgba(0,0,0,0.15);
+    margin: 10px;
+    border-radius: 4px;
+    border-collapse: collapse;
+    float: right;
+}
+.hexdump td {
+  padding: 3px;
+  text-align: center;
+}
+.hexdump td.hextext {
+  text-align: left;
+}
+.hexgutter {
+    width: 30px;
+}
+.clr {
+  clear: both;
+}
+h3 {
+  clear: both;
+}
+</style>
+      <div class='jumbotron'>
+        <h2>Tutorial</h2>
+        <p class='lead'>
+          We're going to look at some CBOR-encoded information a byte at a time.
+        </p>
+      </div>
+      <hr>
+      <div class='row-fluid'>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td>f5</td><td>63</td><td>52</td><td>46</td><td>43</td><td>19</td></tr>
+
+<tr><td>1b</td><td>89</td><td>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td>c1</td><td>1a</td><td>52</td><td>68</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td>
+</tbody></table>
+
+        <p>Consider the following CBOR data stream, where each pair of hex digits represents one byte:</p>
+
+        <p class='clr'>That's a little <i>scary</i>, but it just corresponds to the following JavaScript object:</p>
+
+<pre class='language-javascript'>{
+  "standard": true,
+  "RFC": 7049,
+  "published": new Date(1382565143000)
+}</pre>
+
+        <p>There is nothing special about JavaScipt with respect to CBOR.  It should be usable in almost any programming language.  JavaScript is merely convenient to describe the encoded objects in a more human-readable way.</p>
+
+        <p>We'll walk you through how decoding works.  First, read a single byte from the input, and look at the most sigificant three bits.  They tell you what the "Major Type" is of the data item we're reading.  These three bits can signal one of eight Major Types:</p>
+
+        <table class='table table-striped'>
+          <thead>
+            <tr>
+              <th>Top 3 Bits</th>
+              <th>Major Type</th>
+              <th>Meaning</th>
+              <th>Examples</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr><td><b>000</b></td><td>0</td><td>Positive integer</td><td>123</td></tr>
+            <tr><td><b>001</b></td><td>1</td><td>Negative integer</td><td>-124</td></tr>
+            <tr><td><b>010</b></td><td>2</td><td>Block of bytes</td><td><img src='https://2.gravatar.com/avatar/ac6c04ae76a9281ec1e9d4936c60624d?d=https%3A%2F%2Fidenticons.github.com%2F6c0a705180bd169c15a37d6620fc735f.png&r=x&s=48'</td></td></tr>
+              <tr><td><b>011</b></td><td>3</td><td>String</td><td>"Hello!"</td></tr>
+              <tr><td><b>100</b></td><td>4</td><td>Array</td><td>[1,2]</td></tr>
+              <tr><td><b>101</b></td><td>5</td><td>Map</td><td>["foo": 6]</td></tr>
+              <tr><td><b>110</b></td><td>6</td><td>Tag</td><td>new Date("2013-10-23T21:52:23Z")</td></tr>
+              <tr><td><b>111</b></td><td>7</td><td>Constant or floating point</td><td>null, 1.234</td>
+              </tr>
+          </tbody>
+        </table>
+
+        <p/>
+        <p>The lower 5 bits are "Additional Information".  The Additional Information either encodes small integer value (if it is less than 24), or tells us to read more bytes (if it is 24 or higher).  Let's look at the first byte in the stream we're decoding:</p>
+
+        <h3>Start</h3>
+<table class='hexdump'><tbody>
+<tr><td class='highlight'>a3</td><td>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td>f5</td><td>63</td><td>52</td><td>46</td><td>43</td><td>19</td><td class='hexgutter'></td><td class='hextext'><span class='highlight'>.</span>hstandard.cRFC.</td></tr>
+
+<tr><td>1b</td><td>89</td><td>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td>c1</td><td>1a</td><td>52</td><td>68</td><td class='hexgutter'></td><td class='hextext'>..ipublished..Rh</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td><td class='hextext'>E.</td>
+</tbody></table>
+
+<dl>
+  <dt>Byte (hex)</dt>
+  <dd>a3</dd>
+  <dt>Byte (binary)</dt>
+  <dd><b>101</b>0 0011</dd>
+  <dt>Major Type</dt>
+  <dd><b>101</b> = 5 = Map</dd>
+  <dt>Additional Information</dt>
+  <dd>0 0011 = 3</dd>
+</dl>
+
+        <p>The first byte says that what follows is a Map of name/value pairs.  For the Map major type, the additional information tells us how many pairs of items there will be in the map.  In this case, there will be 3 pairs, so we're going to have to read 6 more items: a name, a value, a name, a value, a name, and a value.</p>
+
+        <h3>Map: 6 items to go</h3>
+        <p>Let's examine the next byte:</p>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td class='highlight'>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td>f5</td><td>63</td><td>52</td><td>46</td><td>43</td><td>19</td><td class='hexgutter'></td><td class='hextext'>.<span class='highlight'>h</span>standard.cRFC.</td></tr>
+
+<tr><td>1b</td><td>89</td><td>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td>c1</td><td>1a</td><td>52</td><td>68</td><td class='hexgutter'></td><td class='hextext'>..ipublished..Rh</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td><td class='hextext'>E.</td>
+</tbody></table>
+
+<dl>
+  <dt>Byte (hex)</dt>
+  <dd>68</dd>
+  <dt>Byte (binary)</dt>
+  <dd><b>011</b>0 1000</dd>
+  <dt>Major Type</dt>
+  <dd><b>011</b> = 3 = UTF-8 String</dd>
+  <dt>Additional Information</dt>
+  <dd>0 1000 = 8</dd>
+</dl>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td>68</td><td class='highlight'>73</td><td class='highlight'>74</td><td class='highlight'>61</td><td class='highlight'>6e</td><td class='highlight'>64</td><td class='highlight'>61</td><td class='highlight'>72</td><td class='highlight'>64</td><td>f5</td><td>63</td><td>52</td><td>46</td><td>43</td><td>19</td><td class='hexgutter'></td><td class='hextext'>.h<span class='highlight'>standard</span>.cRFC.</td></tr>
+
+<tr><td>1b</td><td>89</td><td>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td>c1</td><td>1a</td><td>52</td><td>68</td><td class='hexgutter'></td><td class='hextext'>..ipublished..Rh</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td><td class='hextext'>E.</td>
+</tbody></table>
+
+        <p>We see that this is an eight character long string; the next eight bytes in the input are that string:</p>
+
+        <p class='clr'>Since the string is length-counted, we didn't have to perform any further escape decoding.  The string <code>standard</code> is the first name in the map we're reading.</p>
+
+        <h3>Map: 5 items to go</h3>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td class='highlight'>f5</td><td>63</td><td>52</td><td>46</td><td>43</td><td>19</td><td class='hexgutter'></td><td class='hextext'>.hstandard<span class='highlight'>.</span>cRFC.</td></tr>
+
+<tr><td>1b</td><td>89</td><td>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td>c1</td><td>1a</td><td>52</td><td>68</td><td class='hexgutter'></td><td class='hextext'>..ipublished..Rh</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td><td class='hextext'>E.</td>
+</tbody></table>
+
+        <p>Let's keep going by reading another item, starting with its first byte:</p>
+
+<dl>
+  <dt>Byte (hex)</dt>
+  <dd>f5</dd>
+  <dt>Byte (binary)</dt>
+  <dd><b>111</b>1 0101</dd>
+  <dt>Major Type</dt>
+  <dd><b>111</b> = 7 = Constant or floating point</dd>
+  <dt>Additional Information</dt>
+  <dd>1 0101 = 21 (true)</dd>
+</dl>
+
+      <p>If a Major Type 7 has additional information less than 256, it's a constant.  Here are the currently-defined constants (or, as CBOR calls them "simple values"):</p>
+
+        <table class='table table-striped'>
+          <thead>
+            <tr>
+              <th>CBOR encoded (hex)</th>
+              <th>CBOR encoded (binary)</th>
+              <th>Additional Information</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr><td>f4</td><td><b>111</b>1 0100</td><td>20</td><td>False</td></tr>
+            <tr><td>f5</td><td><b>111</b>1 0101</td><td>21</td><td>True</td></tr>
+            <tr><td>f6</td><td><b>111</b>1 0110</td><td>22</td><td>Null</td></tr>
+            <tr><td>f7</td><td><b>111</b>1 0111</td><td>23</td><td>Undefined</td></tr>
+          </tbody>
+        </table>
+
+      <p>Other values might be defined in the future.  If you receive one you don't understand, feel free thow an error, ignore it, turn it into an integer, or whatever rule works best for your use case.</p>
+
+      <p>Here, the value in the first name/value pair in the map we're reading has the value <code>true</code>.</p>
+
+      <h3>Map: 4 items to go</h3>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td>f5</td><td class='highlight'>63</td><td>52</td><td>46</td><td>43</td><td>19</td><td class='hexgutter'></td><td class='hextext'>.hstandard.<span class='highlight'>c</span>RFC.</td></tr>
+
+<tr><td>1b</td><td>89</td><td>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td>c1</td><td>1a</td><td>52</td><td>68</td><td class='hexgutter'></td><td class='hextext'>..ipublished..Rh</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td><td class='hextext'>E.</td>
+</tbody></table>
+
+      <p>On to the next item!  This should be getting a little more familiar now.</p>
+
+<dl>
+  <dt>Byte (hex)</dt>
+  <dd>63</dd>
+  <dt>Byte (binary)</dt>
+  <dd><b>011</b>0 0011</dd>
+  <dt>Major Type</dt>
+  <dd><b>011</b> = 3 = UTF-8 String</dd>
+  <dt>Additional Information</dt>
+  <dd>0 1000 = 3</dd>
+</dl>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td>f5</td><td>63</td><td class='highlight'>52</td><td class='highlight'>46</td><td class='highlight'>43</td><td>19</td><td class='hexgutter'></td><td class='hextext'>.hstandard.c<span class='highlight'>RFC</span>.</td></tr>
+
+<tr><td>1b</td><td>89</td><td>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td>c1</td><td>1a</td><td>52</td><td>68</td><td class='hexgutter'></td><td class='hextext'>..ipublished..Rh</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td><td class='hextext'>E.</td>
+</tbody></table>
+
+      <p>We're going to need to read three more bytes, and treat them as a UTF-8 string.  The string <code>RFC</code> is the name for the next name/value pair in the map.</p>
+
+      <h3>Map: 3 items to go</h3>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td>f5</td><td>63</td><td>52</td><td>46</td><td>43</td><td class='highlight'>19</td><td class='hexgutter'></td><td class='hextext'>.hstandard.cRFC<span class='highlight'>.</span></td></tr>
+
+<tr><td>1b</td><td>89</td><td>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td>c1</td><td>1a</td><td>52</td><td>68</td><td class='hexgutter'></td><td class='hextext'>..ipublished..Rh</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td><td class='hextext'>E.</td>
+</tbody></table>
+
+      <p>What's the value associated with the <code>RFC</code> name in the map?  It's a positive integer, with additional information of 25:</p>
+
+<dl>
+  <dt>Byte (hex)</dt>
+  <dd>19</dd>
+  <dt>Byte (binary)</dt>
+  <dd><b>000</b>1 1001</dd>
+  <dt>Major Type</dt>
+  <dd><b>000</b> = 0 = Positive integer</dd>
+  <dt>Additional Information</dt>
+  <dd>1 1001 = 25</dd>
+</dl>
+
+      <p>This is the first time we've seen an additional information that is greater than 23.</p>
+
+<table class='table table-striped'>
+<thead>
+<tr><th>Additional Information</th><th>Meaning</th></tr>
+</thead>
+<tbody>
+<tr><td>0..23</td><td>The corresponding number, 0-23</td></tr>
+<tr><td>24</td><td>Read one more byte, use the value of that byte</td></tr>
+<tr><td>25</td><td>Read two more bytes, treat them as a network-order 16-bit integer</td></tr>
+<tr><td>26</td><td>Read four more bytes, treat them as a network-order 32-bit integer</td></tr>
+<tr><td>27</td><td>Read eight more bytes, treat them as a network-order 64-bit integer</td></tr>
+<tr><td>28</td><td>RESERVED: throw an error</td></tr>
+<tr><td>29</td><td>RESERVED: throw an error</td></tr>
+<tr><td>30</td><td>RESERVED: throw an error</td></tr>
+<tr><td>31</td><td>Indeterminite length</td></tr>
+</tbody></table>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td>f5</td><td>63</td><td>52</td><td>46</td><td>43</td><td>19</td><td class='hexgutter'></td><td class='hextext'>.hstandard.cRFC.</td></tr>
+
+<tr><td class='highlight'>1b</td><td class='highlight'>89</td><td>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td>c1</td><td>1a</td><td>52</td><td>68</td><td class='hexgutter'></td><td class='hextext'><span class='highlight'>..</span>ipublished..Rh</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td><td class='hextext'>E.</td>
+</tbody></table>
+
+      <p>Since the additional information is 25, we read two more bytes: <code>1b 89</code>.  When we interpret them in network byte order as an integer, they decode to <code>7049</code>.
+
+      <h3>Map: 2 items to go</h3>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td>f5</td><td>63</td><td>52</td><td>46</td><td>43</td><td>19</td><td class='hexgutter'></td><td class='hextext'>.hstandard.cRFC.</td></tr>
+
+<tr><td>1b</td><td>89</td><td class='highlight'>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td>c1</td><td>1a</td><td>52</td><td>68</td><td class='hexgutter'></td><td class='hextext'>..<span class='highlight'>i</span>published..Rh</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td><td class='hextext'>E.</td>
+</tbody></table>
+
+      <p>The last name in the map is a 9-byte string.</p>
+
+<dl>
+  <dt>Byte (hex)</dt>
+  <dd>69</dd>
+  <dt>Byte (binary)</dt>
+  <dd><b>011</b>0 1001</dd>
+  <dt>Major Type</dt>
+  <dd><b>000</b> = 0 = Positive integer</dd>
+  <dt>Additional Information</dt>
+  <dd>0 1001 = 9</dd>
+</dl>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td>f5</td><td>63</td><td>52</td><td>46</td><td>43</td><td>19</td><td class='hexgutter'></td><td class='hextext'>.hstandard.cRFC.</td></tr>
+
+<tr><td>1b</td><td>89</td><td>69</td><td class='highlight'>70</td><td class='highlight'>75</td><td class='highlight'>62</td><td class='highlight'>6c</td><td class='highlight'>69</td><td class='highlight'>73</td><td class='highlight'>68</td><td class='highlight'>65</td><td class='highlight'>64</td><td>c1</td><td>1a</td><td>52</td><td>68</td><td class='hexgutter'></td><td class='hextext'>..i<span class='highlight'>published</span>..Rh</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td><td class='hextext'>E.</td>
+</tbody></table>
+
+      <p>Here we see the name is <code>published</code>:</p>
+
+      <h3>Map: 1 item to go</h3>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td>f5</td><td>63</td><td>52</td><td>46</td><td>43</td><td>19</td><td class='hexgutter'></td><td class='hextext'>.hstandard.cRFC.</td></tr>
+
+<tr><td>1b</td><td>89</td><td>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td class='highlight'>c1</td><td>1a</td><td>52</td><td>68</td><td class='hexgutter'></td><td class='hextext'>..ipublished<span class='highlight'>.</span>.Rh</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td><td class='hextext'>E.</td>
+</tbody></table>
+
+      <p>The last value is identified by a "tag".  Tags give semantic meaning to the following item.  If your code doesn't support a particular tag number, it can safely parse the entire input byte stream if it chooses.</p>
+
+<dl>
+  <dt>Byte (hex)</dt>
+  <dd>c1</dd>
+  <dt>Byte (binary)</dt>
+  <dd><b>110</b>0 0001</dd>
+  <dt>Major Type</dt>
+  <dd><b>110</b> = 6 = Tag</dd>
+  <dt>Additional Information</dt>
+  <dd>0 0001 = 1 = Date</dd>
+</dl>
+
+    <p>Tag <code>1</code> corresponds to a Date.  The item after the tag is an integer or floating point number of seconds since the <abbr title="1970-01-01T00:00:00Z">epoch</abbr>. Some other tag values that have been defined include:</p>
+
+        <table class='table table-striped'>
+          <thead>
+            <tr>
+              <th>Tag</th>
+              <th>Item Types</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr><td>0</td><td>UTF-8 string</td><td>Date/Time as string</td></tr>
+            <tr><td>1</td><td>float, integer</td><td>Date/Time from epoch</td></tr>
+            <tr><td>32</td><td>UTF-8 string</td><td>URI</td></tr>
+            <tr><td>35</td><td>UTF-8 String</td><td>Regular expression</td></tr>
+          </tbody>
+        </table>
+
+      <h3>Tag: 1 item to go</h3>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td>f5</td><td>63</td><td>52</td><td>46</td><td>43</td><td>19</td><td class='hexgutter'></td><td class='hextext'>.hstandard.cRFC.</td></tr>
+
+<tr><td>1b</td><td>89</td><td>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td>c1</td><td class='highlight'>1a</td><td>52</td><td>68</td><td class='hexgutter'></td><td class='hextext'>..ipublished.<span class='highlight'>.</span>Rh</td></tr>
+
+<td>45</td><td>17</td><td colspan="15"></td><td class='hextext'>E.</td>
+</tbody></table>
+
+      <p>Let's read the tagged item, which starts with the byte <code>1a</code>:</p>
+
+<dl>
+  <dt>Byte (hex)</dt>
+  <dd>1a</dd>
+  <dt>Byte (binary)</dt>
+  <dd><b>000</b>1 1010</dd>
+  <dt>Major Type</dt>
+  <dd><b>000</b> = 0 = Positive integer</dd>
+  <dt>Additional Information</dt>
+  <dd>1 1010 = 1a = 26 = Read 4 more bytes</dd>
+</dl>
+
+<table class='hexdump'><tbody>
+<tr><td>a3</td><td>68</td><td>73</td><td>74</td><td>61</td><td>6e</td><td>64</td><td>61</td><td>72</td><td>64</td><td>f5</td><td>63</td><td>52</td><td>46</td><td>43</td><td>19</td><td class='hexgutter'></td><td class='hextext'>.hstandard.cRFC.</td></tr>
+
+<tr><td>1b</td><td>89</td><td>69</td><td>70</td><td>75</td><td>62</td><td>6c</td><td>69</td><td>73</td><td>68</td><td>65</td><td>64</td><td>c1</td><td>1a</td><td class='highlight'>52</td><td class='highlight'>68</td><td class='hexgutter'></td><td class='hextext'>..ipublished..<span class='highlight'>Rh</span></td></tr>
+
+<td class='highlight'>45</td><td class='highlight'>17</td><td colspan="15"></td><td class='hextext highlight'>E.</td>
+</tbody></table>
+
+<p>The tagged item is the four-byte integer <code>0x52684517</code>, which with the Date/Time tag indicates the point in time 1382565143 seconds since the epoch, or <code>Wed, 23 Oct 2013 21:52:23 GMT</code>, the time when <a href='http://tools.ietf.org/html/rfc7409'>RFC 7409</a> was announced.</p>
+<p class='clr'/>
+
+      <h3>Assembling the map</h3>
+
+      <p>We have now successfully read 3 pairs of items that followed the original map code.  Let's look at it all at once, in the diagnostic text mode defined for CBOR:</p>
+
+      <pre>{"standard": true, "RFC": 7049, "published": 1(1382565143)}</pre>
+
+      <h3>What else?</h3>
+
+      <p>CBOR also supports arrays (Major Type 4, followed by Additional Information number of items), floating point numbers (Major Type 7 followed by 2, 4, or 8 bytes of network-order IEEE754 additional information), and byte strings (Major Type 2 followed by Additional Information number of bytes), all of which should be straightforward for you to figure out now.</p>
